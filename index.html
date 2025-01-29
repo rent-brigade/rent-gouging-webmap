@@ -126,8 +126,8 @@
         map.on('click', 'listing_points', (e) => {
           var description = `<h3>` + "Gouging Rule: " + e.features[0].properties.gougingrule + `</h3>` + 
                  `<h4>` 
-                + "Original Rent: " + e.features[0].properties.tenpercentbaseprice  + "(" + e.features[0].properties.peakpricedate + ')' + '<br>' 
-                + "Peak Listed Rent: " + e.features[0].properties.emergencypeakprice  + "(" + e.features[0].properties.basepricedate + ')'+ '<br>'
+                + "Original Rent: " +"$"+ e.features[0].properties.tenpercentbaseprice  + " (" + e.features[0].properties.peakpricedate + ')' + '<br>' 
+                + "Peak Listed Rent: " +"$" + e.features[0].properties.emergencypeakprice  + " (" + e.features[0].properties.basepricedate + ')'+ '<br>'
                 + `</h4>`;
             new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
