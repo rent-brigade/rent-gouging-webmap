@@ -127,17 +127,21 @@
           const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const bpdate = new Date(e.features[0].properties.peakpricedate);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
+          const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + "$" + e.features[0].properties.tenpercentbaseprice.toLocaleString() + '<br>'
+                      + "Peak Listed Rent: " + " (" + formattedppdate + '): ' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '<br>'
+                      + "<b>" + (e.features[0].properties.peakpriceincrease * 100).toFixed(0) + '%' + "</b>" + " Percent Increase";
+          const fmrrule = "Not listed previous to 1/7/25" + '<br>' +
+                      "Listed Rent: " + " (" + formattedppdate + '): ' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '<br>'
+                      + "<b>" + (e.features[0].properties.peakpriceincrease * 100).toFixed(0) + '%' + "</b>" + " Percent Increase";
           var rule = e.features[0].properties.gougingrule;
                   if (rule != "fmr") {
-                    rule = "Original Rent" + " (" + formattedbpdate + '): ' + "$" + e.features[0].properties.tenpercentbaseprice.toLocaleString() + '<br>'+ "Peak Listed Rent: " 
-                      + " (" + formattedppdate + '): ' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '<br>'
-                      + "<b>" + (e.features[0].properties.peakpriceincrease * 100).toFixed(0) + '%' + "</b>" + " Percent Increase";
+                    rule = tenpercentrule;
                   } else {
-                    rule = "Not listed previous to 1/7/25";
+                    rule = frmrule;
                   }
-          const add_link = `<h3>` +  "<a href=" + '"' +
-                    formatUrl(e.features[0].properties.listingurl) + '"' +
-                    ' target="_blank">' + e.features[0].properties.street_address + "</a>" + `</h3>;
+          const url = e.features[0].properties.listingurl;
+          const link = `<a href="${url}" target="_blank">e.features[0].properties.street_address</a>`;
+          const add_link = `<h3>` +  link + `</h3>;
           var description = ` + 
                  `<h4>` + rule
                 + `</h4>`;
