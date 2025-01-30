@@ -129,9 +129,9 @@
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           var rule = features[0].properties.gougingrule;
                   if (rule != "fmr") {
-                    rule = "Original Rent" + " (" + formattedbpdate + '): ' +"$"+ e.features[0].properties.tenpercentbaseprice.toLocaleString()  + '<br>'+ "Peak Listed Rent: " 
-                      + " (" + formattedppdate + '): ' +"$" + e.features[0].properties.emergencypeakprice.toLocaleString()  + '<br>'
-                      + <b> + (e.features[0].properties.peakpriceincrease * 100).toFixed(0) + '%' + </b> + " Percent Increase";
+                    rule = "Original Rent" + " (" + formattedbpdate + '): ' + "$" + e.features[0].properties.tenpercentbaseprice.toLocaleString() + '<br>'+ "Peak Listed Rent: " 
+                      + " (" + formattedppdate + '): ' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '<br>'
+                      + "<b>" + (e.features[0].properties.peakpriceincrease * 100).toFixed(0) + '%' + "</b>" + " Percent Increase";
                   } else {
                     rule = "Not listed previous to 1/7/25";
                   }
