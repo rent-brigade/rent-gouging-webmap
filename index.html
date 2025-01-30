@@ -144,7 +144,7 @@
           const url = e.features[0].properties.listingurl;
           const link = `<a href="${url}" target="_blank">e.features[0].properties.street_address</a>`;
           const add_link = `<h3>` +  link + `</h3>;
-          var description = ` + 
+          var description = add_link + 
                  `<h4>` + rule
                 + `</h4>`;
             new mapboxgl.Popup()
