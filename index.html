@@ -123,10 +123,20 @@
         // open a popup at the location of the click, with description
         // HTML from the click event's properties.
         map.on('click', 'listing_points', (e) => {
-          var description = `<h3>` + "Gouging Rule: " + e.features[0].properties.gougingrule + `</h3>` + 
+          const ppdate = new Date(e.features[0].properties.peakpricedate);
+          const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
+          const bpdate = new Date(e.features[0].properties.peakpricedate);
+          const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
+          var description = `<h3>` +  "<a href=" +
+                    '"' +
+                    formatUrl(feature.properties.listingurl) +
+                    '"' +
+                    ' target="_blank">' +
+                    e.features[0].properties.street_address +
+                    "</a>" + `</h3>` + 
                  `<h4>` 
-                + "Original Rent: " +"$"+ e.features[0].properties.tenpercentbaseprice  + " (" + e.features[0].properties.peakpricedate + ')' + '<br>' 
-                + "Peak Listed Rent: " +"$" + e.features[0].properties.emergencypeakprice  + " (" + e.features[0].properties.basepricedate + ')'+ '<br>'
+                + "Original Rent" + " (" + formattedbpdate + '): ' +"$"+ e.features[0].properties.tenpercentbaseprice.toLocaleString()  + '<br>' 
+                + "Peak Listed Rent: " ++ " (" + formattedppdate + '): ' +"$" + e.features[0].properties.emergencypeakprice.toLocaleString()  + '<br>'
                 + `</h4>`;
             new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
