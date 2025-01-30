@@ -127,7 +127,7 @@
           const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const bpdate = new Date(e.features[0].properties.peakpricedate);
           const fmr = e.features[0].properties.priceceiling/1.6;
-          const perabovefmr = (e.features[0].properties.emergencypeakprice/fmr)*100.toFixed(0);
+          const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + "$" + e.features[0].properties.tenpercentbaseprice.toLocaleString() + '<br>'
                       + "Peak Listed Rent: " + " (" + formattedppdate + '): ' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '<br>'
