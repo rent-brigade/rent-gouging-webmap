@@ -125,7 +125,7 @@
         map.on('click', 'listing_points', (e) => {
           const ppdate = new Date(e.features[0].properties.peakpricedate);
           const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
-          const bpdate = new Date(e.features[0].properties.peakpricedate);
+          const bpdate = new Date(e.features[0].properties.basepricedate);
           const fmr = e.features[0].properties.priceceiling/1.6;
           const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
@@ -142,8 +142,8 @@
                     rule = fmrrule;
                   }
           const url = e.features[0].properties.listingurl;
-          const link = `<a href="${url}" target="_blank">e.features[0].properties.street_address</a>`;
-          const add_link = `<h3>` +  link + `</h3>';
+          const link = `<a href="${url}" target="_blank">${e.features[0].properties.street_address}</a>`;
+          const add_link = `<h3>` +  link + `</h3>`;
           var description = add_link + 
                  `<h4>` + rule
                 + `</h4>`;
