@@ -127,7 +127,7 @@
           const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const bpdate = new Date(e.features[0].properties.peakpricedate);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
-          var rule = features[0].properties.gougingrule;
+          var rule = e.features[0].properties.gougingrule;
                   if (rule != "fmr") {
                     rule = "Original Rent" + " (" + formattedbpdate + '): ' + "$" + e.features[0].properties.tenpercentbaseprice.toLocaleString() + '<br>'+ "Peak Listed Rent: " 
                       + " (" + formattedppdate + '): ' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '<br>'
@@ -135,13 +135,10 @@
                   } else {
                     rule = "Not listed previous to 1/7/25";
                   }
-          var description = `<h3>` +  "<a href=" +
-                    '"' +
-                    formatUrl(feature.properties.listingurl) +
-                    '"' +
-                    ' target="_blank">' +
-                    e.features[0].properties.street_address +
-                    "</a>" + `</h3>` + 
+          const add_link = `<h3>` +  "<a href=" + '"' +
+                    formatUrl(feature.properties.listingurl) + '"' +
+                    ' target="_blank">' + e.features[0].properties.street_address + "</a>" + `</h3>;
+          var description = ` + 
                  `<h4>` + rule
                 + `</h4>`;
             new mapboxgl.Popup()
