@@ -136,7 +136,7 @@
                     rule = "Not listed previous to 1/7/25";
                   }
           const add_link = `<h3>` +  "<a href=" + '"' +
-                    formatUrl(feature.properties.listingurl) + '"' +
+                    formatUrl(e.features[0].properties.listingurl) + '"' +
                     ' target="_blank">' + e.features[0].properties.street_address + "</a>" + `</h3>;
           var description = ` + 
                  `<h4>` + rule
