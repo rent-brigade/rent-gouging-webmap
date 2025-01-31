@@ -134,7 +134,7 @@
           const fmr = e.features[0].properties.priceceiling/1.6;
           //const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
-          const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + '<b>' e.features[0].properties.tenpercentbaseprice + '</b>' +'<br>'
+          const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + '<b>' + e.features[0].properties.tenpercentbaseprice + '</b>' +'<br>'
                       + "Peak Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + e.features[0].properties.emergencypeakprice + '</b>' + '<br>'
                       + "<b>" + Math.round(parseFloat(e.features[0].properties.peakpriceincrease)) + "%" + "</b>" + " Percent Increase";
           const fmrrule = "Not listed previous to 1/7/25" + '<br>' +
