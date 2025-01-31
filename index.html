@@ -125,12 +125,18 @@
           const ppdate = new Date(e.features[0].properties.peakpricedate);
           const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const bpdate = new Date(e.features[0].properties.basepricedate);
+          var bedroomtype = e.features[0].properties.bedrooms;
+                if (bedroomtype == 0){ 
+                  bedroomtype = "Studio ";
+                } else { 
+                  bedroomtype = bedroomtype + " Bed ";
+                }
           const fmr = e.features[0].properties.priceceiling/1.6;
           //const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + '<b>' + Math.round(e.features[0].properties.tenpercentbaseprice) + '</b>' +'<br>'
                       + "Peak Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + Math.round(e.features[0].properties.emergencypeakprice) + '</b>' + '<br>'
-                      + "<b>" + Math.round(parseFloat(peakpriceincrease)) + "%" + "</b>" + " Percent Increase";
+                      + "<b>" + Math.round(parseFloat(e.features[0].properties.peakpriceincrease)) + "%" + "</b>" + " Percent Increase";
           const fmrrule = "Not listed previous to 1/7/25" + '<br>' +
                       "Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + "$" + Math.round(e.features[0].properties.emergencypeakprice) + '</b>' + '<br>'
                       + "<b>" + Math.round(parseFloat(peak_price_relative_to_fmr)) + '%' + "</b>" + " Percent Above Fair Market Rent";
@@ -144,7 +150,9 @@
           const link = `<a href="${url}" target="_blank" style="color: white;">${e.features[0].properties.street_address}</a>`;
           const add_link = `<h3>` +  link + `</h3>`;
           var description = add_link + 
-                 `<h4>` + rule
+                 `<h4>` + bedroomtype +
+                  e.features[0].properties.home_type +
+                 '<br>' + rule
                 + `</h4>`;
             new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
