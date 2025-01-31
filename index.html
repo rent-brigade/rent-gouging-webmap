@@ -126,14 +126,14 @@
           const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
           const bpdate = new Date(e.features[0].properties.basepricedate);
           const fmr = e.features[0].properties.priceceiling/1.6;
-          const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
+          //const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
           const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
-          const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + '<b>' + "$" + e.features[0].properties.tenpercentbaseprice.toLocaleString() + '</b>' +'<br>'
-                      + "Peak Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '</b>' + '<br>'
-                      + "<b>" + (e.features[0].properties.peakpriceincrease * 100).toFixed(0) + '%' + "</b>" + " Percent Increase";
+          const tenpercentrule = "Original Rent" + " (" + formattedbpdate + '): ' + '<b>' + e.features[0].properties.tenpercentbaseprice.toFixed(0) + '</b>' +'<br>'
+                      + "Peak Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + e.features[0].properties.emergencypeakprice.toFixed(0) + '</b>' + '<br>'
+                      + "<b>" + e.features[0].properties.peakpriceincrease.toFixed() + "</b>" + " Percent Increase";
           const fmrrule = "Not listed previous to 1/7/25" + '<br>' +
-                      "Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + "$" + e.features[0].properties.emergencypeakprice.toLocaleString() + '</b>' + '<br>'
-                      + "<b>" + perabovefmr + '%' + "</b>" + " Percent Above Fair Market Rent";
+                      "Listed Rent" + " (" + formattedppdate + '): ' + '<b>' + "$" + e.features[0].properties.emergencypeakprice.toFixed(0) + '</b>' + '<br>'
+                      + "<b>" + e.features[0].properties.peak_price_relative_to_fmr.toFixed(0) + "</b>" + " Percent Above Fair Market Rent";
           var rule = e.features[0].properties.gougingrule;
                   if (rule != "fmr") {
                     rule = tenpercentrule;
