@@ -10,14 +10,31 @@
       width: 100%;
     }
 
-    /* Popup styling */
+/* text box with feature count */
+
+#record-count {
+    position:absolute; 
+    bottom:10px; 
+    right:50%; 
+    transform:translateX(-50%); 
+    background:rgba(0, 0, 0, 0.6); 
+    padding:8px; 
+    border-radius:5px; 
+    box-shadow:0 2px 5px rgba(0,0,0,0.2); 
+    color: #ffffff; 
+    font: 400 17px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    font-weight:bold;
+}
+
+/* Popup styling */
 
     .mapboxgl-popup {
       padding-bottom: 5px;
     }
 
     .mapboxgl-popup-close-button {
-      color: #ffffff;    
+      color: #ffffff;  
+      font-size: 20px;
     }
 
     .mapboxgl-popup-content {
