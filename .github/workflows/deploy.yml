@@ -1,0 +1,34 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: 'Create env file' # Create .env file
+        run: |
+          touch .env
+          echo VITE_MAPBOX_TOKEN='${{ secrets.MAPBOX_TOKEN }}' >> .env
+          echo VITE_GEOJSON_URL='${{ secrets.GEOJSON_URL }}' >> .env
+          cat .env
+
+      - name: Install dependencies # Install Packages
+        run: npx nypm@latest i
+
+      - name: Build 🔧 # Build site
+        run: npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist # The folder the action should deploy.
