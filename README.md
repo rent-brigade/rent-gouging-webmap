@@ -1,6 +1,6 @@
 # Rent Gouging Web Map
 
-Web Map of Rent Gouging in Los Angeles Area
+Web Map of Rent Gouging in Los Angeles County
 
 ## Development Setup (Vite + Vanilla JS)
 
