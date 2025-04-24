@@ -1,23 +1,36 @@
 {
   "name": "rent-gouging-webmap",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "typescript": "~5.7.2",
-    "vite": "^6.3.1"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+    "preview": "vite preview",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "dependencies": {
     "mapbox-gl": "^3.11.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
+    "@eslint/css": "^0.7.0",
+    "@eslint/js": "^9.25.1",
+    "@eslint/json": "^0.12.0",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
+    "jiti": "^2.4.2",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.31.0",
+    "vite": "^6.3.1"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }
