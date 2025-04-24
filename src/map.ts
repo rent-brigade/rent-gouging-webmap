@@ -11,7 +11,7 @@ export function setupMap() {
     }
   }
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoidmljdG9yaWFiZWNrbGV5IiwiYSI6ImNsMXlpa3J6ZjBjeDgzY28zb2lmYm1kejIifQ.iovH6zCr8nvi07wE0SQIdA' // Mapbox token
+  mapboxgl.accessToken = import.meta.env.MAPBOX_ACCESS_TOKEN
 
   const map = new mapboxgl.Map({
     container: 'map', // container id
@@ -23,6 +23,7 @@ export function setupMap() {
 
   map.on('load', () => {
     const data = '/trb-web-map.geojson'
+    // const data = 'https://rent-brigade-web-map.s3-us-west-1.amazonaws.com/trb-web-map.geojson'
 
     map.addSource('listings', {
       type: 'geojson',
