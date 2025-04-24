@@ -1,5 +1,45 @@
+import type { LngLatLike } from 'mapbox-gl'
+import dayjs from 'dayjs'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+
+const HomeType = Object.freeze({
+  HOME_TYPE_UNKNOWN: 'Unknown',
+  TOWNHOUSE: 'Townhouse',
+  APARTMENT: 'Apartment',
+  MANUFACTURED: 'Manufactured',
+  MULTI_FAMILY: 'Multi-family',
+  SINGLE_FAMILY: 'Single-family',
+  LOT: 'Lot',
+  CONDO: 'Condo',
+})
+
+type GougingRule = 'fmr' | 'tenpercent'
+
+interface WebMapProperties {
+  street_address: string
+  listing_url: string
+  bedrooms: number
+  home_type: keyof typeof HomeType
+  council_district: string | null
+  supervisor_district: number
+  city: string | null
+  community: string | null
+  jurisdiction: string
+  gouging_rule: GougingRule
+  price_ceiling: number
+  base_price: number | null
+  base_price_date: string | null
+  emergency_peak_price: number
+  emergency_peak_price_date: string
+  base_vs_peak_price: null
+  was_ever_gouged: boolean
+  latest_price: number
+  latest_price_date: string
+  is_currently_gouged: boolean
+  fair_market_rent: number | null
+  pct_increase_of_peak_over_base: number
+}
 
 export function setupMap() {
   const transformRequest = (url: string) => {
@@ -13,11 +53,14 @@ export function setupMap() {
 
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ?? import.meta.env.MAPBOX_ACCESS_TOKEN
 
+  const initZoom = 9.5
+  const initCoords = [-118.32010468759735, 34.025238141009766] as LngLatLike
+
   const map = new mapboxgl.Map({
-    container: 'map', // container id
+    container: 'map',
     style: 'mapbox://styles/mapbox/dark-v11',
-    center: [-118.251454, 34.0360767], // starting position [lng, lat]
-    zoom: 11, // starting zoom
+    center: initCoords,
+    zoom: initZoom,
     transformRequest,
   })
 
@@ -58,43 +101,47 @@ export function setupMap() {
       },
     })
 
-    map.on('click', 'listing_points', (e: any) => {
-      const ppdate = new Date(e.features[0].properties.emergency_peak_price_date)
-      console.log({ ppdate })
-      const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })
-      console.log({ formattedppdate })
-      const bpdate = new Date(e.features[0].properties.base_price_date)
-      const bedrooms = Number.parseInt(e.features[0].properties.bedrooms)
-      const bedroomtype = bedrooms === 0 ? 'studio' : `${bedrooms} Bedroom`
+    const parseDate = (date?: string) => {
+      return dayjs(date).format('M/D/YY')
+    }
 
-      // const fmr = e.features[0].properties.price_ceiling / 1.6
-      const emppprice = e.features[0].properties.emergency_peak_price
-      const formattedemppPrice = `$${emppprice.toLocaleString()}`
-      const tpbprice = e.features[0].properties.base_price
-      const formattedtpbPrice = `$${tpbprice.toLocaleString()}`
-      // const perabovefmr = ((e.features[0].properties.emergencypeakprice/fmr)*100).toFixed(0);
-      const newcalc_fmr = e.features[0].properties.emergency / emppprice / (e.features[0].properties.price_ceiling / 1.6) * 100
-      // const pptofmrper = e.features[0].properties.peak_price_relative_to_fmr * 100 // DON'T HAVE 'peak_price_relative_to_FMR'
-      const formattedpptofmrper = `${Math.round(newcalc_fmr)}%`
-      const ppincper = e.features[0].properties.base_vs_peak_price * 100
-      const formattedppincper = `${Math.round(ppincper)}%`
-      const formattedbpdate = bpdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })
-      const tenpercentrule = `Original Rent` + ` (${formattedbpdate}): ` + `<b>${formattedtpbPrice}</b>` + `<br>`
-        + `Peak Listed Rent` + ` (${formattedppdate}): ` + `<b>${formattedemppPrice}</b>` + `<br>`
-        + `<b>${formattedppincper}</b>` + ` Increase`
-      const fmrrule = `Not listed previous to 1/7/25` + `<br>`
-        + `Listed Rent` + ` (${formattedppdate}): ` + `<b>${formattedemppPrice}</b>` + `<br>`
-        + `<b>${formattedpptofmrper}</b>` + ` Percent Above Fair Market Rent`
-      let rule = e.features[0].properties.gouging_rule
-      if (rule !== 'fmr') {
-        rule = tenpercentrule
-      } else {
-        rule = fmrrule
-      }
-      const url = e.features[0].properties.listing_url
-      const link = `<a href="${url}" target="_blank" style="color: white;">${e.features[0].properties.street_address}</a>`
-      const add_link = `<h3>${link}</h3>`
-      const description = `${add_link}<h4>${bedroomtype}${e.features[0].properties.home_type}<br>${rule}</h4>`
+    const parsePrice = (price: number) => {
+      return `$${price?.toLocaleString()}`
+    }
+
+    const parsePercentage = (number: number) => {
+      return `${Math.round(number * 100)}%`
+    }
+
+    map.on('click', 'listing_points', (e) => {
+      const properties = e.features?.[0].properties as WebMapProperties
+
+      const ppDate = parseDate(properties.emergency_peak_price_date)
+      const bpDate = properties?.base_price_date && parseDate(properties.base_price_date)
+      const bedrooms = properties.bedrooms
+      const bedroomtype = bedrooms === 0 ? 'Studio' : `${bedrooms} Bedroom`
+      const emppPrice = parsePrice(properties.emergency_peak_price)
+      const tpbPrice = properties?.base_price && parsePrice(properties.base_price)
+      const fmr = properties.pct_increase_of_peak_over_base
+      const fmrPercentage = parsePercentage(fmr)
+      const percentIncrease = properties?.base_vs_peak_price && parsePercentage(properties.base_vs_peak_price)
+
+      const homeType = HomeType[properties.home_type as keyof typeof HomeType]
+
+      const tenPercentRuleHtml = `Original Rent (${bpDate}): <strong>${tpbPrice}</strong><br>`
+        + `Peak Listed Rent (${ppDate}): <strong>${emppPrice}</strong><br>`
+        + `<strong>${percentIncrease}</strong> Increase`
+
+      const fmrRuleHtml = `Not listed previous to 1/7/25<br>`
+        + `Listed Rent (${ppDate}): <strong>${emppPrice}</strong><br>`
+        + `<strong>${fmrPercentage}</strong> Percent Above Fair Market Rent`
+
+      const gougingRule = properties.gouging_rule
+      const rule = gougingRule === 'fmr' ? fmrRuleHtml : tenPercentRuleHtml
+
+      const listingUrl = properties.listing_url
+      const link = `<a href="${listingUrl}" target="_blank" style="color: white;">${properties.street_address}</a>`
+      const description = `<h3>${link}</h3><h4>${bedroomtype} ${homeType}<br>${rule}</h4>`
       new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(description).addTo(map)
     })
 
