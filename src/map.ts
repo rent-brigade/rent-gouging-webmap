@@ -11,7 +11,7 @@ export function setupMap() {
     }
   }
 
-  mapboxgl.accessToken = import.meta.env.MAPBOX_ACCESS_TOKEN
+  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ?? import.meta.env.MAPBOX_ACCESS_TOKEN
 
   const map = new mapboxgl.Map({
     container: 'map', // container id
@@ -22,8 +22,7 @@ export function setupMap() {
   })
 
   map.on('load', () => {
-    const data = '/trb-web-map.geojson'
-    // const data = 'https://rent-brigade-web-map.s3-us-west-1.amazonaws.com/trb-web-map.geojson'
+    const data = import.meta.env.VITE_WEB_MAP_GEOJSON ?? import.meta.env.WEB_MAP_GEOJSON
 
     map.addSource('listings', {
       type: 'geojson',
@@ -61,7 +60,9 @@ export function setupMap() {
 
     map.on('click', 'listing_points', (e: any) => {
       const ppdate = new Date(e.features[0].properties.emergency_peak_price_date)
+      console.log({ ppdate })
       const formattedppdate = ppdate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })
+      console.log({ formattedppdate })
       const bpdate = new Date(e.features[0].properties.base_price_date)
       const bedrooms = Number.parseInt(e.features[0].properties.bedrooms)
       const bedroomtype = bedrooms === 0 ? 'studio' : `${bedrooms} Bedroom`
