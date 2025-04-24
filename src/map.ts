@@ -51,7 +51,7 @@ export function setupMap() {
     }
   }
 
-  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ?? import.meta.env.MAPBOX_ACCESS_TOKEN
+  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN ?? import.meta.env.MAPBOX_TOKEN
 
   const initZoom = 9.5
   const initCoords = [-118.32010468759735, 34.025238141009766] as LngLatLike
@@ -65,7 +65,7 @@ export function setupMap() {
   })
 
   map.on('load', () => {
-    const data = import.meta.env.VITE_WEB_MAP_GEOJSON ?? import.meta.env.WEB_MAP_GEOJSON
+    const data = import.meta.env.VITE_GEOJSON_URL ?? import.meta.env.GEOJSON_URL
 
     map.addSource('listings', {
       type: 'geojson',
